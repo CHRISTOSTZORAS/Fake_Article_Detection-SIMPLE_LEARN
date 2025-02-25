@@ -1,12 +1,12 @@
 {
-    "name":"Fake Articles Detection",
-    "build": {
-        "dockerfile": "Dockerfile"
-      },
-      "postCreateCommand": "pip install -r requirements.txt",
-      "extensions": ["ms-python.python", "ms-toolsai.jupyter"],
-      "forwardPorts": [8888],
-      "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash"
-      }
-    }
+  "name": "Fake Article Detetction",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "postCreateCommand": "pip install -r requirements.txt",
+  "extensions": ["ms-python.python", "ms-toolsai.jupyter"],
+  "forwardPorts": [8888],
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  }
+}

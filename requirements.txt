@@ -1,32 +1,31 @@
-#libraries for data analysis and ploting
+#for plotting
 pandas
 numpy
 matplotlib
 seaborn
 plotly
-
-#machine learning
+#for machine learning
 scikit-learn
 imbalanced-learn
+mlxtend
+#classification
 xgboost
 lightgbm
 catboost
-
 #deep learning
 tensorflow
 keras
 torch
 torchvision
 torchaudio
-
-#helpful tools
+#helpfull tools
 requests
 beautifulsoup4
 jupyterlab
 notebook
-twdm
+tqdm
 joblib
 optuna
 nltk
 spacy
-mlxtend
+
