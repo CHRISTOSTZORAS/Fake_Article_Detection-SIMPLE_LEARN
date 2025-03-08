@@ -22,7 +22,7 @@ for i in range(23480,23470,-1):
     fake_news.drop([i],axis=0,inplace=True)
     
 data_true_manual_testing=true_news.tail(10)
-for i in range(23480,23470,-1):
+for i in range(21416,21406,-1):
     true_news.drop([i],axis=0,inplace=True)
     
 data_fake_manual_testing['class']=0
@@ -31,16 +31,14 @@ data_true_manual_testing['class']=1
 
 whole_data=pd.concat([fake_news,true_news], axis=0)
 reduced_data=whole_data.drop(['title','subject','date'],axis=1)
-reduced_data.isnull().sum()
-reduced_data=reduced_data.sample(frac=1)
-reduced_data.reset_index(inplace=True)
-reduced_data.drop(['index'],axis=1,inplace=True)
+
 
 #function to remove marks
 def wordopt(text):
     text=text.lower()
     text=re.sub('\[.*?\]','',text)
-    text=re.sub("\\W","",text)
+    text=re.sub("\W","",text)
+    #πρεπει να αλλαξω την απο πανω εντολη να αφαιρει μονο τα κενα η γενικα να δω γιατι αφαιρει ολες τις γραμμες
     text=re.sub('https?://\S+|www\.\S+','',text)
     text=re.sub('<.*?>+','',text)
     text=re.sub('[%s]' % re.escape(string.punctuation),'',text)
