@@ -7,6 +7,8 @@ from sklearn.metrics import accuracy_score,classification_report
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import RandomForestClassifier
 import re
 import string
 
@@ -37,8 +39,6 @@ reduced_data=whole_data.drop(['title','subject','date'],axis=1)
 def wordopt(text):
     text=text.lower()
     text=re.sub('\[.*?\]','',text)
-    text=re.sub("\W","",text)
-    #πρεπει να αλλαξω την απο πανω εντολη να αφαιρει μονο τα κενα η γενικα να δω γιατι αφαιρει ολες τις γραμμες
     text=re.sub('https?://\S+|www\.\S+','',text)
     text=re.sub('<.*?>+','',text)
     text=re.sub('[%s]' % re.escape(string.punctuation),'',text)
@@ -58,20 +58,63 @@ vectorization= TfidfVectorizer()
 xv_train=vectorization.fit_transform(x_train)
 xv_test=vectorization.transform(x_test)
 
-#model logistic regression defining
+# #model logistic regression defining
 logistic_regression=LogisticRegression()
 logistic_regression.fit(xv_train,y_train)
 
 prediction_logistic_regression=logistic_regression.predict(xv_test)
 score_logistic_Regression=logistic_regression.score(xv_test,y_test)
 
-print(prediction_logistic_regression);print(score_logistic_Regression)
-print(classification_report(y_test,prediction_logistic_regression))    
+# print(prediction_logistic_regression);print(score_logistic_Regression)
+# print(classification_report(y_test,prediction_logistic_regression))    
 
-#model decision tree defining
+# #model decision tree defining
 DT=DecisionTreeClassifier()
 DT.fit(xv_train,y_train)
-pred_dt=DT.predict(xv_test)
-DT.score(xv_test,y_test)
+
+prediction_dt=DT.predict(xv_test)
+dt_score=DT.score(xv_test,y_test)
+# print(prediction_dt);print(dt_score)
+# print(classification_report(y_test,prediction_dt))    
+
+
+# #model gradient boosting defining
+# GB=GradientBoostingClassifier(random_state=0)
+# GB.fit(xv_train,y_train)
+# pridiction_gradient_boosting=GB.predict(xv_test)
+# GB_score=GB.score(xv_test,y_test)
+# print(pridiction_gradient_boosting);print(GB_score)
+# print(classification_report(y_test,pridiction_gradient_boosting))
+
+
+# #model random forest defining
+# random_forest=RandomForestClassifier(random_state=0)
+# random_forest.fit(xv_train,y_train)
+# prediction_random_forest=random_forest.predict(xv_test)
+# random_forest_score=random_forest.score(xv_test,y_test)
+# print(prediction_random_forest);print(random_forest_score)
+# print(classification_report(y_test,prediction_random_forest))
+
+def output_label(n):
+    if n==0 :
+        return "Fake News"
+    elif n==1:
+        return "Not a Fake News"
+
+def manual_testing(news):
+    testing_news={"text":[news]}
+    new_def_test=pd.DataFrame(testing_news)
+    new_def_test["text"]=new_def_test['text'].apply(wordopt)
+    new_x_test=new_def_test['text']
+    new_xv_test=vectorization.transform(new_x_test)
+    pred_lr=logistic_regression.predict(new_xv_test)
+    pred_dt=DT.predict(new_xv_test)
+    
+    return("\n\nLR Prediction:{} \nDT Prediction:{}".format(output_label(pred_lr[0]),
+                                                           output_label(pred_dt[0])))
+
+news = input("Enter the news text: ") 
+print(manual_testing(news))
+
 
 
