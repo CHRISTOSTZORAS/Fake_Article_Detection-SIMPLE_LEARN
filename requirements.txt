@@ -26,6 +26,6 @@ notebook
 tqdm
 joblib
 optuna
-nltk
+nltk==3.7.0
 spacy
 

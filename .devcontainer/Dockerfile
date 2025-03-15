@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python:3.9-slim
 
 #update and importing necessary packages
 RUN apt-get update && apt-get install -y git
