@@ -13,8 +13,8 @@ import re
 import string
 
 #data cleaning
-fake_news=pd.read_csv('/workspaces/Fake_Article_Detection/datasets/Fake.csv')
-true_news=pd.read_csv('/workspaces/Fake_Article_Detection/datasets/True.csv')
+fake_news=pd.read_csv('C:\\Users\\tzwrakos\\OneDrive\\Υπολογιστής\\Projects\\Fake_Article_Detection\\Simple Learn\\dataset\\Fake.csv')
+true_news=pd.read_csv('C:\\Users\\tzwrakos\\OneDrive\\Υπολογιστής\\Projects\\Fake_Article_Detection\\Simple Learn\\dataset\\True.csv')
 fake_news['class']=0
 true_news['class']=1
 
@@ -65,8 +65,8 @@ logistic_regression.fit(xv_train,y_train)
 prediction_logistic_regression=logistic_regression.predict(xv_test)
 score_logistic_Regression=logistic_regression.score(xv_test,y_test)
 
-# print(prediction_logistic_regression);print(score_logistic_Regression)
-# print(classification_report(y_test,prediction_logistic_regression))    
+print(prediction_logistic_regression);print(score_logistic_Regression)
+print(classification_report(y_test,prediction_logistic_regression))    
 
 # #model decision tree defining
 DT=DecisionTreeClassifier()
@@ -74,26 +74,9 @@ DT.fit(xv_train,y_train)
 
 prediction_dt=DT.predict(xv_test)
 dt_score=DT.score(xv_test,y_test)
-# print(prediction_dt);print(dt_score)
-# print(classification_report(y_test,prediction_dt))    
+print(prediction_dt);print(dt_score)
+print(classification_report(y_test,prediction_dt))    
 
-
-# #model gradient boosting defining
-# GB=GradientBoostingClassifier(random_state=0)
-# GB.fit(xv_train,y_train)
-# pridiction_gradient_boosting=GB.predict(xv_test)
-# GB_score=GB.score(xv_test,y_test)
-# print(pridiction_gradient_boosting);print(GB_score)
-# print(classification_report(y_test,pridiction_gradient_boosting))
-
-
-# #model random forest defining
-# random_forest=RandomForestClassifier(random_state=0)
-# random_forest.fit(xv_train,y_train)
-# prediction_random_forest=random_forest.predict(xv_test)
-# random_forest_score=random_forest.score(xv_test,y_test)
-# print(prediction_random_forest);print(random_forest_score)
-# print(classification_report(y_test,prediction_random_forest))
 
 def output_label(n):
     if n==0 :
