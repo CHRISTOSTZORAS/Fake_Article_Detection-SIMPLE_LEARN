@@ -30,6 +30,13 @@ for i in range(21416,21406,-1):
 data_fake_manual_testing['class']=0
 data_true_manual_testing['class']=1
 
+# Balance fake and real data
+min_len = min(len(fake_news), len(true_news))
+fake_news_balanced = fake_news.sample(n=min_len, random_state=42)
+true_news_balanced = true_news.sample(n=min_len, random_state=42)
+
+whole_data = pd.concat([fake_news_balanced, true_news_balanced], axis=0)
+reduced_data = whole_data.drop(['title', 'subject', 'date'], axis=1)
 
 whole_data=pd.concat([fake_news,true_news], axis=0)
 reduced_data=whole_data.drop(['title','subject','date'],axis=1)
@@ -37,29 +44,29 @@ reduced_data=whole_data.drop(['title','subject','date'],axis=1)
 
 #function to remove marks
 def wordopt(text):
-    text=text.lower()
-    text=re.sub('\[.*?\]','',text)
-    text=re.sub('https?://\S+|www\.\S+','',text)
-    text=re.sub('<.*?>+','',text)
-    text=re.sub('[%s]' % re.escape(string.punctuation),'',text)
-    text=re.sub('\n','',text)
-    text=re.sub('\w*\d\w*','',text)
+    text = text.lower()
+    text = re.sub('\[.*?\]', '', text)
+    text = re.sub('https?://\S+|www\.\S+', '', text)
+    text = re.sub('<.*?>+', '', text)
+    text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
+    text = re.sub('\n', '', text)
+    text = re.sub('\w*\d\w*', '', text)
     return text
 
-reduced_data['text']=reduced_data['text'].apply(wordopt)
+reduced_data['text'] = reduced_data['text'].apply(wordopt)
 
 #define variabels
 x=reduced_data['text']
 y=reduced_data['class']
 
 #train and split data
-x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.25)
-vectorization= TfidfVectorizer()
-xv_train=vectorization.fit_transform(x_train)
-xv_test=vectorization.transform(x_test)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25, random_state=42)
+vectorization = TfidfVectorizer(ngram_range=(1,2), max_df=0.7, min_df=5)
+xv_train = vectorization.fit_transform(x_train)
+xv_test = vectorization.transform(x_test)
 
 # #model logistic regression defining
-logistic_regression=LogisticRegression()
+logistic_regression = LogisticRegression(C=0.5, penalty='l2', max_iter=1000)
 logistic_regression.fit(xv_train,y_train)
 
 prediction_logistic_regression=logistic_regression.predict(xv_test)
@@ -85,18 +92,20 @@ def output_label(n):
         return "Not a Fake News"
 
 def manual_testing(news):
-    testing_news={"text":[news]}
-    new_def_test=pd.DataFrame(testing_news)
-    new_def_test["text"]=new_def_test['text'].apply(wordopt)
-    new_x_test=new_def_test['text']
-    new_xv_test=vectorization.transform(new_x_test)
-    pred_lr=logistic_regression.predict(new_xv_test)
-    pred_dt=DT.predict(new_xv_test)
+    testing_news = {"text": [news]}
+    new_def_test = pd.DataFrame(testing_news)
+    new_def_test["text"] = new_def_test['text'].apply(wordopt)
+    new_x_test = new_def_test['text']
+    new_xv_test = vectorization.transform(new_x_test)
+    pred_lr = logistic_regression.predict(new_xv_test)
+    pred_dt = DT.predict(new_xv_test)
     
-    return("\n\nLR Prediction:{} \nDT Prediction:{}".format(output_label(pred_lr[0]),
-                                                           output_label(pred_dt[0])))
+    return "\nLR Prediction: {} \nDT Prediction: {}".format(
+        output_label(pred_lr[0]),
+        output_label(pred_dt[0])
+    )
 
-news = input("Enter the news text: ") 
+news = "Olympiakos is the 2024 Conference league winner"
 print(manual_testing(news))
 
 
